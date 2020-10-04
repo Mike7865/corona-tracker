@@ -6,7 +6,7 @@ export const fetchData = async (country) => {
   let changeableUrl = url;
 
   if (country) {
-    changeableUrl = `${url}/countries/${country}`
+    changeableUrl = `${url}/countries/${country}`;
   }
 
   try {
@@ -14,32 +14,26 @@ export const fetchData = async (country) => {
 
     return { confirmed, recovered, deaths, lastUpdate };
   } catch (error) {
-    console.log(error);
+    return error;
   }
-}
+};
 
 export const fetchDailyData = async () => {
   try {
-    const {data} = await axios.get(`${url}/daily`);
+    const { data } = await axios.get(`${url}/daily`);
 
-    const modifiedData = data.map((dailyData) => ({
-      confirmed: dailyData.confirmed.total,
-      deaths: dailyData.deaths.total,
-      date: dailyData.reportDate,
-    }));
-
-    return modifiedData;
+    return data.map(({ confirmed, deaths, reportDate: date }) => ({ confirmed: confirmed.total, deaths: deaths.total, date }));
   } catch (error) {
-    console.log(error);
+    return error;
   }
-}
+};
 
 export const fetchCountries = async () => {
   try {
-    const { data: { countries }} = await axios.get(`${url}/countries`);
+    const { data: { countries } } = await axios.get(`${url}/countries`);
 
     return countries.map((country) => country.name);
   } catch (error) {
-    console.log(error);
+    return error;
   }
-}
+};
